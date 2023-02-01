@@ -6,13 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeModuleModule } from './home-module/home-module.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EditService } from './home-module/services/edit.service';
-
-import {
-  HttpClient,
-  HttpClientModule,
-  HttpClientJsonpModule,
-} from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,16 +15,8 @@ import {
     HomeModuleModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
   ],
-  providers: [
-    {
-      deps: [HttpClient],
-      provide: EditService,
-      useFactory: (jsonp: HttpClient) => () => new EditService(jsonp),
-    },
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
