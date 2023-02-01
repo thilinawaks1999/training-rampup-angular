@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import {
   GridComponent,
+  GridDataResult,
   CancelEvent,
   EditEvent,
   RemoveEvent,
@@ -11,63 +13,40 @@ import {
 } from '@progress/kendo-angular-grid';
 import { State } from '@progress/kendo-data-query';
 import { Student } from '../../models/student';
+import { EditService } from '../../services/edit.service';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent {
-  public data = [
-    {
-      id: 1,
-      name: 'Thilina Sandakelum',
-      gender: 'Male',
-      address: '187, Heenara, Hakuruwela',
-      mobile: '0769493502',
-      birthday: new Date('1999-05-28'),
-      age: 23,
-    },
-    {
-      id: 2,
-      name: 'Anil siriwardhana',
-      gender: 'Male',
-      address: 'New town, Weeraketiya, Tangalle',
-      mobile: '0785643252',
-      birthday: new Date('2002-08-18'),
-      age: 20,
-    },
-    {
-      id: 3,
-      name: 'Hesha Ariyarathne',
-      gender: 'Female',
-      address: '12/3, Rekawa, Ranna',
-      mobile: '0785437981',
-      birthday: new Date('1992-06-01'),
-      age: 30,
-    },
-    {
-      id: 4,
-      name: 'Sithmi Shashirangana',
-      gender: 'Female',
-      address: '56/7, Pool Road, Beliatta',
-      mobile: '0775432173',
-      birthday: new Date('1986-07-27'),
-      age: 36,
-    },
-  ];
-
+export class TableComponent implements OnInit {
+  public view: Observable<GridDataResult> | undefined;
   public gridState: State = {
     sort: [],
     skip: 0,
     take: 15,
   };
+
+  public genderData = ['Male', 'Female', 'Other'];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
+
+  private editService: EditService;
   private editedRowIndex: number | undefined;
+
+  constructor(@Inject(EditService) editServiceFactory: () => EditService) {
+    this.editService = editServiceFactory();
+  }
+
+  public ngOnInit(): void {
+    this.view = this.editService.getData();
+  }
 
   public onStateChange(state: State): void {
     this.gridState = state;
+
+    this.editService.read();
   }
 
   public addHandler(args: AddEvent): void {
@@ -114,16 +93,15 @@ export class TableComponent {
   public saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
     const student: Student = formGroup.value;
 
-    console.log(student, isNew);
+    this.editService.save(student, isNew);
 
     sender.closeRow(rowIndex);
   }
 
   public removeHandler(args: RemoveEvent): void {
-    // remove the data item from the data source
-    this.data.splice(args.rowIndex, 1);
-    // refresh the grid
-    args.sender.cancelCell();
+    // remove the current dataItem from the current data source,
+    // `editService` in this example
+    this.editService.remove(args.dataItem);
   }
 
   private closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex) {
