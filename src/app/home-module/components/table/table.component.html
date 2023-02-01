@@ -1,0 +1,52 @@
+<kendo-grid
+  [data]="view | async"
+  [pageSize]="gridState.take"
+  [skip]="gridState.skip"
+  [sort]="gridState.sort"
+  [pageable]="true"
+  [sortable]="true"
+  (dataStateChange)="onStateChange($event)"
+  (edit)="editHandler($event)"
+  (cancel)="cancelHandler($event)"
+  (save)="saveHandler($event)"
+  (remove)="removeHandler($event)"
+  (add)="addHandler($event)"
+  [navigable]="true">
+  <ng-template kendoGridToolbarTemplate>
+    <button kendoGridAddCommand>Add new</button>
+  </ng-template>
+  <kendo-grid-column
+    field="id"
+    [width]="80"
+    title="ID"
+    [editable]="false"></kendo-grid-column>
+  <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+  <kendo-grid-column field="gender" title="Gender" [contentEditable]="false">
+    <ng-template kendoGridCellTemplate let-genderData>
+      <kendo-dropdownlist
+        [data]="['Male', 'Female', 'Other']"
+        [defaultItem]="'Select'">
+      </kendo-dropdownlist>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="address" title="Address"></kendo-grid-column>
+  <kendo-grid-column field="mobile" title="Mobile Number"></kendo-grid-column>
+  <kendo-grid-column field="birthday" title="DOB" editor="date" format="{0:D}">
+  </kendo-grid-column>
+  <kendo-grid-column
+    field="age"
+    title="Age"
+    [editable]="false"></kendo-grid-column>
+  <kendo-grid-command-column title="command" [width]="220">
+    <ng-template kendoGridCellTemplate let-isNew="isNew">
+      <button kendoGridEditCommand [primary]="true">Edit</button>
+      <button kendoGridRemoveCommand>Remove</button>
+      <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+        {{ isNew ? 'Add' : 'Update' }}
+      </button>
+      <button kendoGridCancelCommand>
+        {{ isNew ? 'Discard changes' : 'Cancel' }}
+      </button>
+    </ng-template>
+  </kendo-grid-command-column>
+</kendo-grid>

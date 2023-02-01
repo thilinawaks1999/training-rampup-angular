@@ -1,0 +1,31 @@
+body {
+  background: #adadb1;
+}
+.header {
+  z-index: 10;
+}
+.title {
+  text-transform: capitalize;
+  font-size: 18px;
+  margin: 0;
+}
+
+.k-appbar-dark .k-button-clear {
+  color: #ffffffff;
+}
+.k-appbar-dark .k-button-clear:hover {
+  color: #ffffff99;
+}
+.k-icon {
+  font-size: 18px;
+}
+.k-appbar .k-appbar-separator {
+  margin: 0 8px;
+}
+.wrap {
+  margin-bottom: 30px;
+}
+
+.icon-export {
+  font-size: 30px;
+}
