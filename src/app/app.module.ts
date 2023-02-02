@@ -12,6 +12,7 @@ import { DateInputModule } from '@progress/kendo-angular-dateinputs';
 import { FormsModule } from '@angular/forms';
 import { PopupModule } from '@progress/kendo-angular-popup';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { IntlModule } from '@progress/kendo-angular-intl';
 
 import {
   HttpClient,
@@ -58,6 +59,7 @@ const config: SocketIoConfig = {
     PopupModule,
     InputsModule,
     FormsModule,
+    IntlModule,
   ],
   providers: [
     {

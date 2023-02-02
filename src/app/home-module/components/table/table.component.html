@@ -29,7 +29,7 @@
       <kendo-dropdownlist
         [data]="['Male', 'Female']"
         [valuePrimitive]="true"
-        [formControl]="formGroup.get()">
+        [formControl]="formGroup.get('gender')">
       </kendo-dropdownlist>
     </ng-template>
     <ng-template kendoGridCellTemplate let-dataItem>
@@ -38,7 +38,17 @@
   </kendo-grid-column>
   <kendo-grid-column field="address" title="Address"></kendo-grid-column>
   <kendo-grid-column field="mobile" title="Mobile Number"></kendo-grid-column>
-  <kendo-grid-column field="birthday" title="DOB" editor="date" format="{0:D}">
+  <kendo-grid-column field="birthday" title="DOB" format="{0:D}">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup">
+      <kendo-datepicker
+        [formControl]="formGroup.get('birthday')"
+        [value]="dataItem.birthday"
+        [min]="minDate"
+        [max]="maxDate"></kendo-datepicker>
+    </ng-template>
   </kendo-grid-column>
   <kendo-grid-column
     field="age"

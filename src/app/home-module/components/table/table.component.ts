@@ -39,6 +39,8 @@ export class TableComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
   private editedRowIndex: number | undefined;
+  public minDate: Date = new Date('1950-01-01');
+  public maxDate: Date = new Date('2005-01-01');
 
   constructor(
     private editService: EditService,
@@ -61,10 +63,28 @@ export class TableComponent implements OnInit {
     // define all editable fields validators and default values
     this.formGroup = new FormGroup({
       id: new FormControl(),
-      name: new FormControl('', Validators.required),
+      name: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]*$'),
+        ])
+      ),
       age: new FormControl(),
-      address: new FormControl('', Validators.required),
-      mobile: new FormControl('', Validators.required),
+      address: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern("^[a-zA-Z0-9,/' -]*$"),
+        ])
+      ),
+      mobile: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$'),
+        ])
+      ),
       gender: new FormControl('', Validators.required),
       birthday: new FormControl('', Validators.required),
     });
@@ -78,10 +98,28 @@ export class TableComponent implements OnInit {
     this.closeEditor(args.sender);
     this.formGroup = new FormGroup({
       id: new FormControl(dataItem.id),
-      name: new FormControl(dataItem.name, Validators.required),
+      name: new FormControl(
+        dataItem.name,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]*$'),
+        ])
+      ),
       age: new FormControl(dataItem.age),
-      address: new FormControl(dataItem.address, Validators.required),
-      mobile: new FormControl(dataItem.mobile, Validators.required),
+      address: new FormControl(
+        dataItem.address,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern("^[a-zA-Z0-9,/' -]*$"),
+        ])
+      ),
+      mobile: new FormControl(
+        dataItem.mobile,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$'),
+        ])
+      ),
       gender: new FormControl(dataItem.gender, Validators.required),
       birthday: new FormControl(dataItem.birthday, Validators.required),
     });

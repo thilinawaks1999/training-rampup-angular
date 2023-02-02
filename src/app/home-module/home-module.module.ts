@@ -17,9 +17,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { PopupModule } from '@progress/kendo-angular-popup';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { PopupAnchorDirective } from '../utils/directives/popup/popup-anchor.directive';
+import { DatePickerModule } from '@progress/kendo-angular-dateinputs';
 
 @NgModule({
-  declarations: [HeaderComponent, TableComponent, ContainersComponent],
+  declarations: [
+    HeaderComponent,
+    TableComponent,
+    ContainersComponent,
+    PopupAnchorDirective,
+  ],
 
   imports: [
     CommonModule,
@@ -35,6 +42,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
     FormsModule,
     PopupModule,
     InputsModule,
+    DatePickerModule,
   ],
   providers: [ToastService],
 })
