@@ -7,6 +7,10 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { NavigationModule } from '@progress/kendo-angular-navigation';
 import { IconsModule } from '@progress/kendo-angular-icons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StudentEffects } from '../store/effects/studentEffect';
+import { studentReducer } from '../store/reducers/studentReducer';
 
 @NgModule({
   declarations: [HeaderComponent, TableComponent, ContainersComponent],
@@ -17,6 +21,8 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     NavigationModule,
     IconsModule,
     DropDownsModule,
+    StoreModule.forFeature('students', studentReducer),
+    EffectsModule.forFeature([StudentEffects]),
   ],
 })
 export class HomeModuleModule {}

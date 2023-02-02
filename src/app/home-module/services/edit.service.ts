@@ -133,11 +133,23 @@ export class EditService extends BehaviorSubject<Student[]> {
       mobile: student.mobile,
     };
 
-    return this.http.post('http://localhost:5000/student', add).subscribe();
+    return this.http.post('http://localhost:5000/student', add).pipe(
+      map((response: any) => {
+        const responseWithDateObject = {
+          ...response,
+          birthday: new Date(response.birthday),
+        };
+        return responseWithDateObject;
+      })
+    );
   }
 
   deleteStudent(id: number) {
-    return this.http.delete(`http://localhost:5000/student/${id}`).subscribe();
+    return this.http.delete(`http://localhost:5000/student/${id}`).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 
   updateStudent(student: Student) {
@@ -151,8 +163,14 @@ export class EditService extends BehaviorSubject<Student[]> {
       mobile: student.mobile,
     };
 
-    return this.http
-      .patch(`http://localhost:5000/student/${id}`, update)
-      .subscribe();
+    return this.http.patch(`http://localhost:5000/student/${id}`, update).pipe(
+      map((response: any) => {
+        const responseWithDateObject = {
+          ...response,
+          birthday: new Date(response.birthday),
+        };
+        return responseWithDateObject;
+      })
+    );
   }
 }
