@@ -16,6 +16,16 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environments';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { ToastService, AngularToastifyModule } from 'angular-toastify';
+
+const config: SocketIoConfig = {
+  url: environment.socketUrl, // socket server url;
+  options: {
+    transports: ['websocket'],
+  },
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,12 +46,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
     }),
+    SocketIoModule.forRoot(config), // socket module
+    AngularToastifyModule, // toast module
   ],
   providers: [
     {
       deps: [HttpClient],
       provide: EditService,
     },
+    ToastService,
   ],
   bootstrap: [AppComponent],
 })

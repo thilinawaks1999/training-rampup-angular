@@ -35,8 +35,6 @@ export class TableComponent implements OnInit {
   };
 
   students$!: Observable<Student[]>;
-
-  public genderData = ['Male', 'Female', 'Other'];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
   private editedRowIndex: number | undefined;
@@ -50,7 +48,6 @@ export class TableComponent implements OnInit {
 
   public onStateChange(state: State): void {
     this.gridState = state;
-
     this.editService.read();
   }
 
@@ -74,7 +71,6 @@ export class TableComponent implements OnInit {
     // define all editable fields validators and default values
     const { dataItem } = args;
     this.closeEditor(args.sender);
-
     this.formGroup = new FormGroup({
       id: new FormControl(dataItem.id),
       name: new FormControl(dataItem.name, Validators.required),
@@ -103,13 +99,11 @@ export class TableComponent implements OnInit {
     } else {
       this.store.dispatch(updateStudents({ student }));
     }
-
     sender.closeRow(rowIndex);
   }
 
   public removeHandler(args: RemoveEvent): void {
     // remove the current dataItem from the current data source,
-
     this.store.dispatch(deleteStudents({ student: args.dataItem }));
   }
 

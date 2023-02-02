@@ -12,7 +12,7 @@ export class EditService extends BehaviorSubject<Student[]> {
 
   private data: Student[] = [];
 
-  public ageCalculation(birthday: Date): number {
+  ageCalculation(birthday: Date): number {
     const today = new Date();
     const birthDate = new Date(birthday);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -75,13 +75,8 @@ export class EditService extends BehaviorSubject<Student[]> {
     if (!dataItem) {
       return;
     }
-
-    // find orignal data item
     const originalDataItem = this.data.find(item => item.id === dataItem.id);
-
-    // revert changes
     Object.assign(originalDataItem as never, dataItem);
-
     super.next(this.data);
   }
 }
