@@ -39,7 +39,7 @@ export class EditService extends BehaviorSubject<Student[]> {
   }
 
   public addressValidation(address: string): boolean {
-    const regex = new RegExp(/^[a-zA-Z0-9\s,'-]*$/);
+    const regex = new RegExp(/^[a-zA-Z0-9\s,/'-]*$/);
     return regex.test(address);
   }
 
