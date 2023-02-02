@@ -20,7 +20,34 @@
     [width]="80"
     title="ID"
     [editable]="false"></kendo-grid-column>
-  <kendo-grid-column field="name" title="Name"></kendo-grid-column>
+  <kendo-grid-column field="name" title="Name">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('name')"
+        [value]="dataItem.name"></kendo-textbox>
+
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('name').invalid &&
+          !(formGroup.get('name').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
+        <span class="k-icon k-i-exclamation-circle"></span>
+        {{
+          formGroup.get('name').errors?.required
+            ? 'Name is required'
+            : 'Enter a valid name'
+        }}
+      </kendo-popup>
+    </ng-template>
+  </kendo-grid-column>
   <kendo-grid-column field="gender" title="Gender">
     <ng-template
       kendoGridEditTemplate
@@ -36,8 +63,62 @@
       {{ dataItem.gender }}
     </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="address" title="Address"></kendo-grid-column>
-  <kendo-grid-column field="mobile" title="Mobile Number"></kendo-grid-column>
+  <kendo-grid-column field="address" title="Address">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('address')"
+        [value]="dataItem.address"></kendo-textbox>
+
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('address').invalid &&
+          !(formGroup.get('address').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
+        <span class="k-icon k-i-exclamation-circle"></span>
+        {{
+          formGroup.get('name').errors?.required
+            ? 'Address is required'
+            : 'Enter a valid Address'
+        }}
+      </kendo-popup>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="mobile" title="Mobile Number">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('mobile')"
+        [value]="dataItem.mobile"></kendo-textbox>
+
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('mobile').invalid &&
+          !(formGroup.get('mobile').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
+        <span class="k-icon k-i-exclamation-circle"></span>
+        {{
+          formGroup.get('mobile').errors?.required
+            ? 'Mobile Number is required'
+            : 'Enter a valid Mobile Number'
+        }}
+      </kendo-popup>
+    </ng-template>
+  </kendo-grid-column>
   <kendo-grid-column field="birthday" title="DOB" format="{0:D}">
     <ng-template
       kendoGridEditTemplate

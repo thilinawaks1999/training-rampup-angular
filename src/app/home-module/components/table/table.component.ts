@@ -136,13 +136,6 @@ export class TableComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
     const student: Student = formGroup.value;
-    const Validate = this.editService.validate(student);
-
-    if (!Validate.valid) {
-      this._toastService.error(Validate.message as string);
-      return;
-    }
-
     if (isNew) {
       this.store.dispatch(addStudents({ student }));
     } else {
