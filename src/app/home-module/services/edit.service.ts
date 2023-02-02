@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { Student } from '../models/student';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EditService extends BehaviorSubject<Student[]> {
-  constructor(private http: HttpClient) {
+  constructor() {
     super([]);
   }
 
@@ -73,22 +71,6 @@ export class EditService extends BehaviorSubject<Student[]> {
     }
   }
 
-  public save(data: Student, isNew?: boolean): void {
-    if (!this.validate(data)) return;
-    if (isNew) {
-      this.addStudent(data);
-    } else {
-      this.updateStudent(data);
-    }
-
-    this.reset();
-  }
-
-  public remove(data: Student): void {
-    this.deleteStudent(data.id as number);
-    this.reset();
-  }
-
   public resetItem(dataItem: Student): void {
     if (!dataItem) {
       return;
@@ -101,76 +83,5 @@ export class EditService extends BehaviorSubject<Student[]> {
     Object.assign(originalDataItem as never, dataItem);
 
     super.next(this.data);
-  }
-
-  private reset() {
-    this.data = [];
-  }
-
-  /////////////////////////////////////////////
-
-  getData(): Observable<any> {
-    return this.http.get('http://localhost:5000/student').pipe(
-      map((response: any) => {
-        const responseWithDateObject = response.map((item: any) => {
-          return {
-            ...item,
-            birthday: new Date(item.birthday),
-          };
-        });
-        return responseWithDateObject;
-      })
-    );
-  }
-
-  addStudent(student: Student) {
-    const add = {
-      name: student.name,
-      address: student.address,
-      age: this.ageCalculation(student.birthday as Date),
-      birthday: student.birthday,
-      gender: student.gender,
-      mobile: student.mobile,
-    };
-
-    return this.http.post('http://localhost:5000/student', add).pipe(
-      map((response: any) => {
-        const responseWithDateObject = {
-          ...response,
-          birthday: new Date(response.birthday),
-        };
-        return responseWithDateObject;
-      })
-    );
-  }
-
-  deleteStudent(id: number) {
-    return this.http.delete(`http://localhost:5000/student/${id}`).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
-  }
-
-  updateStudent(student: Student) {
-    const id = student.id;
-    const update = {
-      name: student.name,
-      address: student.address,
-      age: this.ageCalculation(student.birthday as Date),
-      birthday: student.birthday,
-      gender: student.gender,
-      mobile: student.mobile,
-    };
-
-    return this.http.patch(`http://localhost:5000/student/${id}`, update).pipe(
-      map((response: any) => {
-        const responseWithDateObject = {
-          ...response,
-          birthday: new Date(response.birthday),
-        };
-        return responseWithDateObject;
-      })
-    );
   }
 }

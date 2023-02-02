@@ -1,10 +1,16 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { selectStudents } from '../../../store/selectors/studentSelector';
+import {
+  getStudents,
+  addStudents,
+  updateStudents,
+  deleteStudents,
+} from '../../../store/actions/studentActions';
 
 import {
   GridComponent,
-  GridDataResult,
   CancelEvent,
   EditEvent,
   RemoveEvent,
@@ -14,6 +20,7 @@ import {
 import { State } from '@progress/kendo-data-query';
 import { Student } from '../../models/student';
 import { EditService } from '../../services/edit.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-table',
@@ -21,26 +28,24 @@ import { EditService } from '../../services/edit.service';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  public view: Observable<GridDataResult> | undefined;
   public gridState: State = {
     sort: [],
     skip: 0,
     take: 15,
   };
 
+  students$!: Observable<Student[]>;
+
   public genderData = ['Male', 'Female', 'Other'];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
-
-  private editService: EditService;
   private editedRowIndex: number | undefined;
 
-  constructor(@Inject(EditService) editServiceFactory: () => EditService) {
-    this.editService = editServiceFactory();
-  }
+  constructor(private editService: EditService, private store: Store) {}
 
   public ngOnInit(): void {
-    this.view = this.editService.getData();
+    this.students$ = this.store.select(selectStudents);
+    this.store.dispatch(getStudents());
   }
 
   public onStateChange(state: State): void {
@@ -93,15 +98,19 @@ export class TableComponent implements OnInit {
   public saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
     const student: Student = formGroup.value;
 
-    this.editService.save(student, isNew);
+    if (isNew) {
+      this.store.dispatch(addStudents({ student }));
+    } else {
+      this.store.dispatch(updateStudents({ student }));
+    }
 
     sender.closeRow(rowIndex);
   }
 
   public removeHandler(args: RemoveEvent): void {
     // remove the current dataItem from the current data source,
-    // `editService` in this example
-    this.editService.remove(args.dataItem);
+
+    this.store.dispatch(deleteStudents({ student: args.dataItem }));
   }
 
   private closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex) {

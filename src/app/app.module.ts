@@ -41,7 +41,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     {
       deps: [HttpClient],
       provide: EditService,
-      useFactory: (jsonp: HttpClient) => () => new EditService(jsonp),
     },
   ],
   bootstrap: [AppComponent],

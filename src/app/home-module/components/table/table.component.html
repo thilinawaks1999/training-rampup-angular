@@ -1,5 +1,5 @@
 <kendo-grid
-  [data]="view | async"
+  [data]="students$ | async"
   [pageSize]="gridState.take"
   [skip]="gridState.skip"
   [sort]="gridState.sort"
@@ -21,13 +21,13 @@
     title="ID"
     [editable]="false"></kendo-grid-column>
   <kendo-grid-column field="name" title="Name"></kendo-grid-column>
-  <kendo-grid-column field="gender" title="Gender" [contentEditable]="false">
-    <ng-template kendoGridCellTemplate let-genderData>
+  <kendo-grid-column field="gender" title="Gender">
+    <!-- <ng-template kendoGridCellTemplate let-genderData>
       <kendo-dropdownlist
         [data]="['Male', 'Female', 'Other']"
         [defaultItem]="'Select'">
       </kendo-dropdownlist>
-    </ng-template>
+    </ng-template> -->
   </kendo-grid-column>
   <kendo-grid-column field="address" title="Address"></kendo-grid-column>
   <kendo-grid-column field="mobile" title="Mobile Number"></kendo-grid-column>

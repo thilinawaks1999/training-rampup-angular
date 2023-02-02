@@ -5,5 +5,5 @@ export class Student {
   public address: string | undefined;
   public mobile: string | undefined;
   public gender: string | undefined;
-  public birthday: Date | undefined;
+  public birthday: Date | string | undefined;
 }

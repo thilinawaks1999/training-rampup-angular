@@ -28,7 +28,12 @@ export const studentReducer = createReducer(
     getStudentsSuccess,
     (state, { students }): StudentState => ({
       ...state,
-      students,
+      students: students.map(item => {
+        return {
+          ...item,
+          birthday: new Date(item.birthday as string),
+        };
+      }),
       isLoading: false,
     })
   ),
@@ -41,7 +46,10 @@ export const studentReducer = createReducer(
     addStudentsSuccess,
     (state, { student }): StudentState => ({
       ...state,
-      students: [...state.students, student],
+      students: [
+        ...state.students,
+        { ...student, birthday: new Date(student.birthday as string) },
+      ],
       isLoading: false,
     })
   ),
@@ -60,7 +68,10 @@ export const studentReducer = createReducer(
       ...state,
       students: state.students.map(item => {
         if (item.id === student.id) {
-          return student;
+          return {
+            ...student,
+            birthday: new Date(student.birthday as string),
+          };
         }
         return item;
       }),
