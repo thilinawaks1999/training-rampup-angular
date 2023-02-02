@@ -8,6 +8,7 @@ import {
   updateStudents,
   deleteStudents,
 } from '../../../store/actions/studentActions';
+import { ToastService } from 'angular-toastify';
 
 import {
   GridComponent,
@@ -39,7 +40,11 @@ export class TableComponent implements OnInit {
   public formGroup: any;
   private editedRowIndex: number | undefined;
 
-  constructor(private editService: EditService, private store: Store) {}
+  constructor(
+    private editService: EditService,
+    private store: Store,
+    private _toastService: ToastService
+  ) {}
 
   public ngOnInit(): void {
     this.students$ = this.store.select(selectStudents);
@@ -93,6 +98,12 @@ export class TableComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
     const student: Student = formGroup.value;
+    const Validate = this.editService.validate(student);
+
+    if (!Validate.valid) {
+      this._toastService.error(Validate.message as string);
+      return;
+    }
 
     if (isNew) {
       this.store.dispatch(addStudents({ student }));

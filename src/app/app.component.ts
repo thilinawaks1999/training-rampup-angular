@@ -21,4 +21,8 @@ export class AppComponent implements OnInit {
       });
     });
   }
+
+  public displayToast(msg: string) {
+    this._toastService.info(msg);
+  }
 }

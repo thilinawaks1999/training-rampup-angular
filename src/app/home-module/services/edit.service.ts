@@ -11,19 +11,6 @@ export class EditService extends BehaviorSubject<Student[]> {
   }
 
   private data: Student[] = [];
-
-  ageCalculation(birthday: Date): number {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  }
-
   //validations
 
   public nameValidation(name: string): boolean {
@@ -41,28 +28,23 @@ export class EditService extends BehaviorSubject<Student[]> {
     return regex.test(address);
   }
 
-  public validate(dataItem: Student): boolean {
+  public validate(dataItem: Student): { valid: boolean; message?: string } {
     if (!dataItem) {
-      console.log('dataItem is null');
-      return false;
+      return { valid: false, message: 'Please enter the details' };
     }
 
     if (!this.nameValidation(dataItem.name as string)) {
-      console.log('name is not valid');
-      return false;
+      return { valid: false, message: 'Please enter the valid name' };
     }
 
     if (!this.phoneNumberValidation(dataItem.mobile as string)) {
-      console.log('mobile is not valid');
-      return false;
+      return { valid: false, message: 'Please enter the valid mobile number' };
     }
 
     if (!this.addressValidation(dataItem.address as string)) {
-      console.log('address is not valid');
-      return false;
+      return { valid: false, message: 'Please enter the valid address' };
     }
-
-    return true;
+    return { valid: true };
   }
 
   public read(): void {

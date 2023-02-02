@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StudentEffects } from '../store/effects/studentEffect';
 import { studentReducer } from '../store/reducers/studentReducer';
+import { ToastService, AngularToastifyModule } from 'angular-toastify';
 
 @NgModule({
   declarations: [HeaderComponent, TableComponent, ContainersComponent],
@@ -23,6 +24,8 @@ import { studentReducer } from '../store/reducers/studentReducer';
     DropDownsModule,
     StoreModule.forFeature('students', studentReducer),
     EffectsModule.forFeature([StudentEffects]),
+    AngularToastifyModule,
   ],
+  providers: [ToastService],
 })
 export class HomeModuleModule {}
