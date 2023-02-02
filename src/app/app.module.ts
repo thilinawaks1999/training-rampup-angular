@@ -7,6 +7,11 @@ import { AppComponent } from './app.component';
 import { HomeModuleModule } from './home-module/home-module.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditService } from './home-module/services/edit.service';
+import { DropDownListModule } from '@progress/kendo-angular-dropdowns';
+import { DateInputModule } from '@progress/kendo-angular-dateinputs';
+import { FormsModule } from '@angular/forms';
+import { PopupModule } from '@progress/kendo-angular-popup';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 
 import {
   HttpClient,
@@ -48,6 +53,11 @@ const config: SocketIoConfig = {
     }),
     SocketIoModule.forRoot(config), // socket module
     AngularToastifyModule, // toast module
+    DropDownListModule,
+    DateInputModule,
+    PopupModule,
+    InputsModule,
+    FormsModule,
   ],
   providers: [
     {
