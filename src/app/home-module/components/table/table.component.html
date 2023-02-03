@@ -1,5 +1,5 @@
 <kendo-grid
-  [data]="view | async"
+  [data]="students$ | async"
   [pageSize]="gridState.take"
   [skip]="gridState.skip"
   [sort]="gridState.sort"
@@ -20,16 +20,123 @@
     [width]="80"
     title="ID"
     [editable]="false"></kendo-grid-column>
-  <kendo-grid-column field="name" title="Name"></kendo-grid-column>
-  <kendo-grid-column field="gender" title="Gender" [contentEditable]="false">
+  <kendo-grid-column field="name" title="Name">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('name')"
+        [value]="dataItem.name"></kendo-textbox>
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('name').invalid &&
+          !(formGroup.get('name').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
+          formGroup.get('name').errors?.required
+            ? 'Name is required'
+            : 'Enter a valid name'
+        }}</span>
+      </kendo-popup>
+    </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="address" title="Address"></kendo-grid-column>
-  <kendo-grid-column field="mobile" title="Mobile Number"></kendo-grid-column>
-  <kendo-grid-column field="birthday" title="DOB" editor="date" format="{0:D}">
+  <kendo-grid-column field="gender" title="Gender">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup">
+      <kendo-dropdownlist
+        [data]="['Male', 'Female']"
+        [valuePrimitive]="true"
+        [formControl]="formGroup.get('gender')">
+      </kendo-dropdownlist>
+    </ng-template>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.gender }}
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="address" title="Address">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('address')"
+        [value]="dataItem.address"></kendo-textbox>
+
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('address').invalid &&
+          !(formGroup.get('address').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
+          formGroup.get('name').errors?.required
+            ? 'Address is required'
+            : 'Enter a valid Address'
+        }}</span>
+      </kendo-popup>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="mobile" title="Mobile Number">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup"
+      let-isNew="isNew">
+      <kendo-textbox
+        #input="popupAnchor"
+        popupAnchor
+        [formControl]="formGroup.get('mobile')"
+        [value]="dataItem.mobile"></kendo-textbox>
+
+      <kendo-popup
+        [anchor]="input.element"
+        *ngIf="
+          formGroup.get('mobile').invalid &&
+          !(formGroup.get('mobile').untouched && isNew)
+        "
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
+          formGroup.get('mobile').errors?.required
+            ? 'Mobile Number is required'
+            : 'Enter a valid Mobile Number'
+        }}</span>
+      </kendo-popup>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="birthday" title="DOB" format="{0:D}">
+    <ng-template
+      kendoGridEditTemplate
+      let-dataItem="dataItem"
+      let-formGroup="formGroup">
+      <kendo-datepicker
+        [formControl]="formGroup.get('birthday')"
+        [value]="dataItem.birthday"
+        [min]="minDate"
+        [max]="maxDate"></kendo-datepicker>
+    </ng-template>
   </kendo-grid-column>
   <kendo-grid-column
     field="age"
     title="Age"
+    [width]="80"
     [editable]="false"></kendo-grid-column>
   <kendo-grid-command-column title="command" [width]="220">
     <ng-template kendoGridCellTemplate let-isNew="isNew">

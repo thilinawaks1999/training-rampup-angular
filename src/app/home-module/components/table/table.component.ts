@@ -1,10 +1,16 @@
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { selectStudents } from '../../../store/selectors/studentSelector';
+import {
+  getStudents,
+  addStudents,
+  updateStudents,
+  deleteStudents,
+} from '../../../store/actions/studentActions';
 
 import {
   GridComponent,
-  GridDataResult,
   CancelEvent,
   EditEvent,
   RemoveEvent,
@@ -14,6 +20,7 @@ import {
 import { State } from '@progress/kendo-data-query';
 import { Student } from '../../models/student';
 import { EditService } from '../../services/edit.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-table',
@@ -21,26 +28,28 @@ import { EditService } from '../../services/edit.service';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  public view: Observable<GridDataResult> | undefined;
   public gridState: State = {
     sort: [],
     skip: 0,
     take: 15,
   };
 
-  public genderData = ['Male', 'Female', 'Other'];
+  students$!: Observable<Student[]>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
   private editedRowIndex: number | undefined;
+  public minDate: Date = new Date('1950-01-01');
+  public maxDate: Date = new Date('2005-01-01');
 
-  constructor(private editService: EditService) {}
+  constructor(private editService: EditService, private store: Store) {}
 
   public ngOnInit(): void {
-    this.view = this.editService.getData();
+    this.students$ = this.store.select(selectStudents);
+    this.store.dispatch(getStudents());
   }
 
   public onStateChange(state: State): void {
     this.gridState = state;
-
     this.editService.read();
   }
 
@@ -49,10 +58,28 @@ export class TableComponent implements OnInit {
     // define all editable fields validators and default values
     this.formGroup = new FormGroup({
       id: new FormControl(),
-      name: new FormControl('', Validators.required),
+      name: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]*$'),
+        ])
+      ),
       age: new FormControl(),
-      address: new FormControl('', Validators.required),
-      mobile: new FormControl('', Validators.required),
+      address: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern("^[a-zA-Z0-9,/' -]*$"),
+        ])
+      ),
+      mobile: new FormControl(
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$'),
+        ])
+      ),
       gender: new FormControl('', Validators.required),
       birthday: new FormControl('', Validators.required),
     });
@@ -64,13 +91,30 @@ export class TableComponent implements OnInit {
     // define all editable fields validators and default values
     const { dataItem } = args;
     this.closeEditor(args.sender);
-
     this.formGroup = new FormGroup({
       id: new FormControl(dataItem.id),
-      name: new FormControl(dataItem.name, Validators.required),
+      name: new FormControl(
+        dataItem.name,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z ]*$'),
+        ])
+      ),
       age: new FormControl(dataItem.age),
-      address: new FormControl(dataItem.address, Validators.required),
-      mobile: new FormControl(dataItem.mobile, Validators.required),
+      address: new FormControl(
+        dataItem.address,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern("^[a-zA-Z0-9,/' -]*$"),
+        ])
+      ),
+      mobile: new FormControl(
+        dataItem.mobile,
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$'),
+        ])
+      ),
       gender: new FormControl(dataItem.gender, Validators.required),
       birthday: new FormControl(dataItem.birthday, Validators.required),
     });
@@ -87,16 +131,19 @@ export class TableComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
     const student: Student = formGroup.value;
-
-    this.editService.save(student, isNew);
-
+    if (isNew) {
+      this.store.dispatch(addStudents({ student }));
+    } else {
+      this.store.dispatch(updateStudents({ student }));
+    }
     sender.closeRow(rowIndex);
   }
 
   public removeHandler(args: RemoveEvent): void {
     // remove the current dataItem from the current data source,
-    // `editService` in this example
-    this.editService.remove(args.dataItem);
+    window.confirm(
+      `Are you sure you want to delete student with name ${args.dataItem.name}`
+    ) && this.store.dispatch(deleteStudents({ student: args.dataItem }));
   }
 
   private closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex) {
