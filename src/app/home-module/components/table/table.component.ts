@@ -39,7 +39,7 @@ export class TableComponent implements OnInit {
   public formGroup: any;
   private editedRowIndex: number | undefined;
   public minDate: Date = new Date('1950-01-01');
-  public maxDate: Date = new Date('2005-01-01');
+  public maxDate: Date = this.editService.getMaxDate();
 
   constructor(private editService: EditService, private store: Store) {}
 

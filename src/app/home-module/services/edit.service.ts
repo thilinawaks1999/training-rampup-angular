@@ -41,4 +41,12 @@ export class EditService extends BehaviorSubject<Student[]> {
 
     return age;
   }
+
+  public getMaxDate(): Date {
+    const today = new Date();
+    const eighteenYrsAgo = new Date(
+      today.setFullYear(today.getFullYear() - 18)
+    );
+    return eighteenYrsAgo;
+  }
 }
