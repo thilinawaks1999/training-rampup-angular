@@ -1,5 +1,5 @@
 <kendo-grid
-  [data]="data"
+  [data]="view | async"
   [pageSize]="gridState.take"
   [skip]="gridState.skip"
   [sort]="gridState.sort"
