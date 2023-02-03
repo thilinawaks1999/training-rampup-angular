@@ -12,72 +12,19 @@ export class StudentServiceService {
 
   constructor(private http: HttpClient) {}
 
-  public ageCalculation(birthday: Date): number {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  }
-
   public getStudents(): Observable<Student[]> {
-    return new Observable<Student[]>(observer => {
-      this.http
-        .get<Student[]>(this.BaseUrl)
-        .subscribe((students: Student[]) => {
-          observer.next(students);
-        });
-    });
+    return this.http.get<Student[]>(this.BaseUrl);
   }
 
   public addStudent(student: Student): Observable<Student> {
-    const postObj = {
-      name: student.name,
-      mobile: student.mobile,
-      address: student.address,
-      birthday: student.birthday,
-      gender: student.gender,
-      age: this.ageCalculation(student.birthday as Date),
-    };
-    return new Observable<Student>(observer => {
-      this.http
-        .post<Student>(this.BaseUrl, postObj)
-        .subscribe((student: Student) => {
-          observer.next(student);
-        });
-    });
+    return this.http.post<Student>(this.BaseUrl, student);
   }
 
   public updateStudent(student: Student): Observable<Student> {
-    const postObj = {
-      id: student.id,
-      name: student.name,
-      mobile: student.mobile,
-      address: student.address,
-      birthday: student.birthday,
-      gender: student.gender,
-      age: this.ageCalculation(student.birthday as Date),
-    };
-    return new Observable<Student>(observer => {
-      this.http
-        .patch<Student>(`${this.BaseUrl}/${student.id}`, postObj)
-        .subscribe((student: Student) => {
-          observer.next(student);
-        });
-    });
+    return this.http.patch<Student>(`${this.BaseUrl}/${student.id}`, student);
   }
 
   public deleteStudent(id: number): Observable<Student> {
-    return new Observable<Student>(observer => {
-      this.http
-        .delete<Student>(`${this.BaseUrl}/${id}`)
-        .subscribe((student: Student) => {
-          observer.next(student);
-        });
-    });
+    return this.http.delete<Student>(`${this.BaseUrl}/${id}`);
   }
 }

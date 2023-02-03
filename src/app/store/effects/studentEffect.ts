@@ -16,12 +16,15 @@ import {
   updateStudentsFailure,
   updateStudentsSuccess,
 } from '../actions/studentActions';
+import { Student } from 'src/app/home-module/models/student';
+import { EditService } from './../../home-module/services/edit.service';
 
 @Injectable()
 export class StudentEffects {
   constructor(
     private actions$: Actions,
-    private studentService: StudentServiceService
+    private studentService: StudentServiceService,
+    private editService: EditService
   ) {}
 
   getStudents$ = createEffect(() => {
@@ -40,7 +43,15 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(addStudents),
       mergeMap(({ student }) => {
-        return this.studentService.addStudent(student).pipe(
+        const postStudent = {
+          name: student.name,
+          mobile: student.mobile,
+          address: student.address,
+          birthday: student.birthday,
+          gender: student.gender,
+          age: this.editService.ageCalculation(student.birthday as Date),
+        } as Student;
+        return this.studentService.addStudent(postStudent).pipe(
           map(student => addStudentsSuccess({ student })),
           catchError(error => [addStudentsFailure({ error })])
         );
@@ -51,12 +62,22 @@ export class StudentEffects {
   updateStudents$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateStudents),
-      mergeMap(({ student }) =>
-        this.studentService.updateStudent(student).pipe(
+      mergeMap(({ student }) => {
+        const postStudent = {
+          id: student.id,
+          name: student.name,
+          mobile: student.mobile,
+          address: student.address,
+          birthday: student.birthday,
+          gender: student.gender,
+          age: this.editService.ageCalculation(student.birthday as Date),
+        } as Student;
+
+        return this.studentService.updateStudent(postStudent).pipe(
           map(student => updateStudentsSuccess({ student })),
           catchError(error => [updateStudentsFailure({ error })])
-        )
-      )
+        );
+      })
     );
   });
 
