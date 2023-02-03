@@ -146,7 +146,9 @@ export class TableComponent implements OnInit {
 
   public removeHandler(args: RemoveEvent): void {
     // remove the current dataItem from the current data source,
-    this.store.dispatch(deleteStudents({ student: args.dataItem }));
+    window.confirm(
+      `Are you sure you want to delete student with name ${args.dataItem.name}`
+    ) && this.store.dispatch(deleteStudents({ student: args.dataItem }));
   }
 
   private closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex) {
