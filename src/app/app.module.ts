@@ -6,13 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeModuleModule } from './home-module/home-module.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EditService } from './home-module/services/edit.service';
+import { DropDownListModule } from '@progress/kendo-angular-dropdowns';
+import { DateInputModule } from '@progress/kendo-angular-dateinputs';
+// import { FormsModule } from '@angular/forms';
+// import { PopupModule } from '@progress/kendo-angular-popup';
+// import { InputsModule } from '@progress/kendo-angular-inputs';
+// import { IntlModule } from '@progress/kendo-angular-intl';
 
-import {
-  HttpClient,
-  HttpClientModule,
-  HttpClientJsonpModule,
-} from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,15 +24,10 @@ import {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpClientJsonpModule,
+    DropDownListModule,
+    DateInputModule,
   ],
-  providers: [
-    {
-      deps: [HttpClient],
-      provide: EditService,
-      useFactory: (jsonp: HttpClient) => () => new EditService(jsonp),
-    },
-  ],
+  providers: [HttpClient],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

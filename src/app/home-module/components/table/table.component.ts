@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import {
@@ -29,15 +29,10 @@ export class TableComponent implements OnInit {
   };
 
   public genderData = ['Male', 'Female', 'Other'];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public formGroup: any;
-
-  private editService: EditService;
   private editedRowIndex: number | undefined;
 
-  constructor(@Inject(EditService) editServiceFactory: () => EditService) {
-    this.editService = editServiceFactory();
-  }
+  constructor(private editService: EditService) {}
 
   public ngOnInit(): void {
     this.view = this.editService.getData();
