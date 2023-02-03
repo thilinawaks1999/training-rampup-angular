@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { EditService } from 'src/app/home-module/services/edit.service';
 import { StudentServiceService } from 'src/app/home-module/services/student-service.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, mergeMap, catchError } from 'rxjs/operators';
@@ -22,7 +21,6 @@ import {
 export class StudentEffects {
   constructor(
     private actions$: Actions,
-    private editService: EditService,
     private studentService: StudentServiceService
   ) {}
 

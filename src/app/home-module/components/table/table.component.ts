@@ -8,7 +8,6 @@ import {
   updateStudents,
   deleteStudents,
 } from '../../../store/actions/studentActions';
-import { ToastService } from 'angular-toastify';
 
 import {
   GridComponent,
@@ -42,11 +41,7 @@ export class TableComponent implements OnInit {
   public minDate: Date = new Date('1950-01-01');
   public maxDate: Date = new Date('2005-01-01');
 
-  constructor(
-    private editService: EditService,
-    private store: Store,
-    private _toastService: ToastService
-  ) {}
+  constructor(private editService: EditService, private store: Store) {}
 
   public ngOnInit(): void {
     this.students$ = this.store.select(selectStudents);
