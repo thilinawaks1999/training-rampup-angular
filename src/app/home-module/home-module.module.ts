@@ -12,7 +12,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [HeaderComponent, TableComponent, ContainersComponent],
-
   imports: [
     CommonModule,
     GridModule,

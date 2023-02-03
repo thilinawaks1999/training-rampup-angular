@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Student } from '../models/student';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class EditService extends BehaviorSubject<Student[]> {
   constructor(private http: HttpClient) {
     super([]);
   }
+
+  BaseUrL: string = environment.BaseUrL;
 
   private data: Student[] = [];
 
@@ -47,16 +50,14 @@ export class EditService extends BehaviorSubject<Student[]> {
   }
 
   public resetItem(dataItem: Student): void {
-    if (!dataItem) {
-      return;
-    }
-
-    // find orignal data item
-    const originalDataItem = this.data.find(item => item.id === dataItem.id);
-
-    // revert changes
-    Object.assign(originalDataItem as never, dataItem);
-
+    if (!dataItem) return;
+    const originalDataItemIndex = this.data.findIndex(
+      item => item.id === dataItem.id
+    );
+    this.data[originalDataItemIndex] = {
+      ...this.data[originalDataItemIndex],
+      ...dataItem,
+    };
     super.next(this.data);
   }
 
@@ -65,7 +66,7 @@ export class EditService extends BehaviorSubject<Student[]> {
   }
 
   getData(): Observable<any> {
-    return this.http.get('http://localhost:5000/student').pipe(
+    return this.http.get(this.BaseUrL).pipe(
       map((response: any) => {
         const responseWithDateObject = response.map((item: any) => {
           return {
@@ -88,11 +89,11 @@ export class EditService extends BehaviorSubject<Student[]> {
       mobile: student.mobile,
     };
 
-    return this.http.post('http://localhost:5000/student', add).subscribe();
+    return this.http.post(this.BaseUrL, add).subscribe();
   }
 
   deleteStudent(id: number) {
-    return this.http.delete(`http://localhost:5000/student/${id}`).subscribe();
+    return this.http.delete(`${this.BaseUrL}/${id}`).subscribe();
   }
 
   updateStudent(student: Student) {
@@ -106,8 +107,6 @@ export class EditService extends BehaviorSubject<Student[]> {
       mobile: student.mobile,
     };
 
-    return this.http
-      .patch(`http://localhost:5000/student/${id}`, update)
-      .subscribe();
+    return this.http.patch(`${this.BaseUrL}/${id}`, update).subscribe();
   }
 }
