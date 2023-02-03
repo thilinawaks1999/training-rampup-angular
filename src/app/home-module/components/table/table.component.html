@@ -31,20 +31,20 @@
         popupAnchor
         [formControl]="formGroup.get('name')"
         [value]="dataItem.name"></kendo-textbox>
-
       <kendo-popup
         [anchor]="input.element"
         *ngIf="
           formGroup.get('name').invalid &&
           !(formGroup.get('name').untouched && isNew)
         "
-        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
-        <span class="k-icon k-i-exclamation-circle"></span>
-        {{
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
           formGroup.get('name').errors?.required
             ? 'Name is required'
             : 'Enter a valid name'
-        }}
+        }}</span>
       </kendo-popup>
     </ng-template>
   </kendo-grid-column>
@@ -81,13 +81,14 @@
           formGroup.get('address').invalid &&
           !(formGroup.get('address').untouched && isNew)
         "
-        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
-        <span class="k-icon k-i-exclamation-circle"></span>
-        {{
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
           formGroup.get('name').errors?.required
             ? 'Address is required'
             : 'Enter a valid Address'
-        }}
+        }}</span>
       </kendo-popup>
     </ng-template>
   </kendo-grid-column>
@@ -109,13 +110,14 @@
           formGroup.get('mobile').invalid &&
           !(formGroup.get('mobile').untouched && isNew)
         "
-        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg">
-        <span class="k-icon k-i-exclamation-circle"></span>
-        {{
+        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+        class="k-custome-styles">
+        <span class="k-icon k-i-exclamation-circle span-custom-icon"></span>
+        <span class="span-custom">{{
           formGroup.get('mobile').errors?.required
             ? 'Mobile Number is required'
             : 'Enter a valid Mobile Number'
-        }}
+        }}</span>
       </kendo-popup>
     </ng-template>
   </kendo-grid-column>
@@ -134,6 +136,7 @@
   <kendo-grid-column
     field="age"
     title="Age"
+    [width]="80"
     [editable]="false"></kendo-grid-column>
   <kendo-grid-command-column title="command" [width]="220">
     <ng-template kendoGridCellTemplate let-isNew="isNew">

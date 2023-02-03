@@ -7,6 +7,8 @@ import { Student } from '../models/student';
   providedIn: 'root',
 })
 export class StudentServiceService {
+  BaseUrl = 'http://localhost:5000/student';
+
   constructor(private http: HttpClient) {}
 
   public ageCalculation(birthday: Date): number {
@@ -24,7 +26,7 @@ export class StudentServiceService {
   public getStudents(): Observable<Student[]> {
     return new Observable<Student[]>(observer => {
       this.http
-        .get<Student[]>('http://localhost:5000/student')
+        .get<Student[]>(this.BaseUrl)
         .subscribe((students: Student[]) => {
           observer.next(students);
         });
@@ -42,7 +44,7 @@ export class StudentServiceService {
     };
     return new Observable<Student>(observer => {
       this.http
-        .post<Student>('http://localhost:5000/student', postObj)
+        .post<Student>(this.BaseUrl, postObj)
         .subscribe((student: Student) => {
           observer.next(student);
         });
@@ -61,9 +63,8 @@ export class StudentServiceService {
     };
     return new Observable<Student>(observer => {
       this.http
-        .patch<Student>(`http://localhost:5000/student/${student.id}`, postObj)
+        .patch<Student>(`${this.BaseUrl}/${student.id}`, postObj)
         .subscribe((student: Student) => {
-          console.log(student);
           observer.next(student);
         });
     });
@@ -72,7 +73,7 @@ export class StudentServiceService {
   public deleteStudent(id: number): Observable<Student> {
     return new Observable<Student>(observer => {
       this.http
-        .delete<Student>(`http://localhost:5000/student/${id}`)
+        .delete<Student>(`${this.BaseUrl}/${id}`)
         .subscribe((student: Student) => {
           observer.next(student);
         });
