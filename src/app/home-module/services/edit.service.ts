@@ -19,11 +19,14 @@ export class EditService extends BehaviorSubject<Student[]> {
   }
 
   public resetItem(dataItem: Student): void {
-    if (!dataItem) {
-      return;
-    }
-    const originalDataItem = this.data.find(item => item.id === dataItem.id);
-    Object.assign(originalDataItem as never, dataItem);
+    if (!dataItem) return;
+    const originalDataItemIndex = this.data.findIndex(
+      item => item.id === dataItem.id
+    );
+    this.data[originalDataItemIndex] = {
+      ...this.data[originalDataItemIndex],
+      ...dataItem,
+    };
     super.next(this.data);
   }
 }

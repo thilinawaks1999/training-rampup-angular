@@ -4,6 +4,7 @@
 
 export const environment = {
   socketUrl: 'http://localhost:5000',
+  BaseUrL: 'http://localhost:5000/student',
   production: false,
 };
 
